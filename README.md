@@ -1,6 +1,8 @@
 # rna-editing
 This pipeline uses SPRINT and RNAEditingIndexer to identify editing events from paired-end RNA-seq data.
 
+Be careful: this pipeline is in testing!
+
 ## Installation
 The pipeline is already installed on the Flamingo cluster of Gustave Roussy.  
 It is localized here: /mnt/beegfs/pipelines/rna-editing
@@ -64,11 +66,11 @@ snakemake --profile ${Editing_pipeline}/profiles/slurm \
 7. Identification of Editing events (RNAEditingIndexer)
 8. Summary of RNAEditingIndexer results (R)
 
-Information about Editing tools:
-SPRINT:
-https://github.com/jumphone/SPRINT
-https://academic.oup.com/bioinformatics/article/33/22/3538/4004872
-RNAEditingIndexer
-https://github.com/a2iEditing/RNAEditingIndexer
-https://pubmed.ncbi.nlm.nih.gov/31636457/
+Information about Editing tools:  
+SPRINT:  
+https://github.com/jumphone/SPRINT  
+https://academic.oup.com/bioinformatics/article/33/22/3538/4004872  
+RNAEditingIndexer:  
+https://github.com/a2iEditing/RNAEditingIndexer  
+https://pubmed.ncbi.nlm.nih.gov/31636457/  
 
