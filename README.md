@@ -8,7 +8,7 @@ It is localized here: /mnt/beegfs/pipelines/rna-editing
 ## Using
 You need to make 2 files: a design file and a configuration file.   
 ### Configuration file
-You can copy the template config/config.yaml.
+You can copy the example from config/config.yaml.
 - **design**: absolute path to your design.csv file.
 - **output_dir**: absolute path to the output directory where results will be saved.
 - **reference**: the reference to use for the alignment and the idetification of editing events. Possible choices are hg19, hg38, mm10 or mm9. The reference will be downloaded from the UCSC web site.
@@ -20,6 +20,12 @@ It must be a comma separated file (.csv where comma is ",") with 3 columns:
 - **R1_fastq**: absolute path to the R1.fastq.gz file.
 - **R2_fastq**: absolute path to the R2.fastq.gz file.
 
+Example:
+```
+sample_id,R1_fastq,R2_fastq
+S1_patient,/mnt/beegfs/scratch/m_aglave/Edition_RNA/data_input/S1-patient_R1.fastq.gz,/mnt/beegfs/scratch/m_aglave/Edition_RNA/data_input/S1-patient_R2.fastq.gz
+S2_patient,/mnt/beegfs/scratch/m_aglave/Edition_RNA/data_input/S2-patient_R1.fastq.gz,/mnt/beegfs/scratch/m_aglave/Edition_RNA/data_input/S2-patient_R2.fastq.gz
+```
 > Notes:
 > - sample names mustn't contain special characters or spaces.
 > - fastq files must be gzipped.
