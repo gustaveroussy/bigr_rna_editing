@@ -1,0 +1,14 @@
+restart-times: 5
+jobscript: "slurm-jobscript.sh"
+cluster: "slurm-submit.py"
+cluster-status: "slurm-status.py"
+max-jobs-per-second: 1
+max-status-checks-per-second: 1
+local-cores: 1
+jobs: 30
+keep-going: true
+reason: false
+printshellcmds: true
+jobname: "{name}.{jobid}.snakejob"
+use-conda: true
+conda-prefix: /mnt/beegfs/scratch/m_aglave/test_Edition_TCGA/script/envs/conda

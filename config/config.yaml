@@ -1,0 +1,6 @@
+#config file for the RNA editing pipeline
+
+design: "/mnt/beegfs/scratch/m_aglave/test_Edition_TCGA/script/design.csv"
+output_dir: "/mnt/beegfs/scratch/m_aglave/test_Edition_TCGA/data_output/"
+reference: "hg38" #possible hg19, hg38, mm10, mm9
+samples_order_for_ggplot: "MR009-patient-mut_prePARPi,MR0191-patient-rev"
