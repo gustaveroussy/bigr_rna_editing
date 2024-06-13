@@ -1,0 +1,19 @@
+name: null
+channels:
+  - bioconda
+  - auto
+  - conda-forge
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1=conda_forge
+  - _openmp_mutex=4.5=2_gnu
+  - ca-certificates=2024.6.2=hbcca054_0
+  - libgcc-ng=13.2.0=h77fa898_7
+  - libgomp=13.2.0=h77fa898_7
+  - libzlib=1.3.1=h4ab18f5_1
+  - ncurses=6.5=h59595ed_0
+  - openssl=1.1.1w=hd590300_0
+  - samtools=1.3.1=0
+  - zlib=1.3.1=h4ab18f5_1
+prefix: /mnt/beegfs/userdata/m_aglave/.environnement_conda/samtools
+
