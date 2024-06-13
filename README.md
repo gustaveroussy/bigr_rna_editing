@@ -5,7 +5,7 @@ Be careful: this pipeline is in testing!
 
 ## Installation
 The pipeline is already installed on the Flamingo cluster of Gustave Roussy.  
-It is localized here: /mnt/beegfs/pipelines/rna-editing
+It is localized here: /mnt/beegfs/pipelines/rna-editing/<version>
 
 ## Using
 You need to make 2 files: a design file and a configuration file.   
@@ -49,7 +49,7 @@ source /mnt/beegfs/software/conda/etc/profile.d/conda.sh
 conda activate /mnt/beegfs/userdata/m_aglave/.environnement_conda/scRNAseq_10X_user
 module load singularity
 
-Editing_pipeline="/mnt/beegfs/pipelines/rna-editing/"
+Editing_pipeline="/mnt/beegfs/pipelines/rna-editing/<version>/"
 snakemake --profile ${Editing_pipeline}/profiles/slurm \
           -s ${Editing_pipeline}/Snakefile \
           --configfile path_to/my_configuration_file.yaml
