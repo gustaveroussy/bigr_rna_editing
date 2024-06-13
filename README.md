@@ -3,7 +3,7 @@ This pipeline uses SPRINT and RNAEditingIndexer to identify editing events from 
 
 ## Installation
 The pipeline is already installed on the Flamingo cluster of Gustave Roussy.  
-It is localized here:
+It is localized here: /mnt/beegfs/pipelines/rna-editing
 
 ## Using
 You need to make 2 files: a design file and a configuration file.   
