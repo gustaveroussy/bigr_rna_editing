@@ -53,3 +53,22 @@ snakemake --profile ${Editing_pipeline}/profiles/slurm \
           --configfile path_to/my_configuration_file.yaml
 ```
 
+## Steps of the pipeline
+1. Symbolic link of fastq files
+2. QC & Trimming (fastQC, fastp & multiqc)
+3. BWA index generation (via SPRINT)
+3. BWA alignement (via SPRINT)
+4. Identification of Editing events (SPRINT)
+5. Summary of SPRINT results (R)
+6. Bam sorting (Samtools)
+7. Identification of Editing events (RNAEditingIndexer)
+8. Summary of RNAEditingIndexer results (R)
+
+Information about Editing tools:
+SPRINT:
+https://github.com/jumphone/SPRINT
+https://academic.oup.com/bioinformatics/article/33/22/3538/4004872
+RNAEditingIndexer
+https://github.com/a2iEditing/RNAEditingIndexer
+https://pubmed.ncbi.nlm.nih.gov/31636457/
+
