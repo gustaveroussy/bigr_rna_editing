@@ -89,7 +89,8 @@ for col in design.drop(columns = "sample_id").columns.tolist():
 if not set(config["samples_order_for_ggplot"].split(",")).issubset(design["sample_id"]):
     sys.exit("Error sampes names of 'samples_order_for_ggplot' from config file don't match 'Sample_id' of design file.")
 
-
+#SPRINT type of results
+RES_TYPE=["identified_all", "identified_hyper", "identified_regular"]
 
 sys.stderr.write("\n########################### Run ############################\n\n")
 
@@ -98,22 +99,22 @@ sys.stderr.write("\n########################### Run ############################
 rule all:
     input:
         #symlink_qc_filtering
-        expand(os.path.normpath(OUTPUT_DIR + "/fastp/trimmed/{sample_name}_R1.fastq.gz"), sample_name=SAMPLE_NAME),
-        expand(os.path.normpath(OUTPUT_DIR + "/fastp/trimmed/{sample_name}_R2.fastq.gz"), sample_name=SAMPLE_NAME),
-        os.path.normpath(OUTPUT_DIR + "/multiqc.html"),
+        expand(os.path.normpath(OUTPUT_DIR + "/fastp/trimmed/{sample_name}_R1.fastq"), sample_name=SAMPLE_NAME),
+        expand(os.path.normpath(OUTPUT_DIR + "/fastp/trimmed/{sample_name}_R2.fastq"), sample_name=SAMPLE_NAME),
+        os.path.normpath(OUTPUT_DIR + "/multiqc_report.html"),
         #SPRINT
-        expand(os.path.normpath(OUTPUT_DIR + "/SPRINT/{sample_name}/{sample_name}.bam"), sample_name=SAMPLE_NAME),
+        expand(os.path.normpath(OUTPUT_DIR + "/SPRINT/{sample_name}/tmp/genome/all.bam"), sample_name=SAMPLE_NAME),
         expand(os.path.normpath(OUTPUT_DIR + "/SPRINT/{sample_name}/PARAMETER.txt"), sample_name=SAMPLE_NAME),
         expand(os.path.normpath(OUTPUT_DIR + "/SPRINT/{sample_name}/SPRINT_identified_all.res"), sample_name=SAMPLE_NAME),
         expand(os.path.normpath(OUTPUT_DIR + "/SPRINT/{sample_name}/SPRINT_identified_hyper.res"), sample_name=SAMPLE_NAME),
         expand(os.path.normpath(OUTPUT_DIR + "/SPRINT/{sample_name}/SPRINT_identified_regular.res"), sample_name=SAMPLE_NAME),
-        os.path.normpath(OUTPUT_DIR + "/SPRINT/Number_of_all_edition_by_sample.png"),
-        os.path.normpath(OUTPUT_DIR + "/SPRINT/Number_of_each_edition_by_sample_log_y_scale.png"),
-        os.path.normpath(OUTPUT_DIR + "/SPRINT/Number_of_each_edition_by_sample.png"),
-        os.path.normpath(OUTPUT_DIR + "/SPRINT/Number_of_reads_supporting_the_edition_for_each_sample.png"),
-        os.path.normpath(OUTPUT_DIR + "/SPRINT/Percentages_of_reads_supporting_the_edition_for_each_sample.png"),
-        os.path.normpath(OUTPUT_DIR + "/SPRINT/Summary_table_counts_SPRINT_by_strand.tsv"),
-        os.path.normpath(OUTPUT_DIR + "/SPRINT/Summary_table_counts_SPRINT.tsv"),
+        expand(os.path.normpath(OUTPUT_DIR + "/SPRINT/Number_of_all_edition_by_sample_{res_type}.png"), res_type=RES_TYPE),
+        expand(os.path.normpath(OUTPUT_DIR + "/SPRINT/Number_of_each_edition_by_sample_log_y_scale_{res_type}.png"), res_type=RES_TYPE),
+        expand(os.path.normpath(OUTPUT_DIR + "/SPRINT/Number_of_each_edition_by_sample_{res_type}.png"), res_type=RES_TYPE),
+        expand(os.path.normpath(OUTPUT_DIR + "/SPRINT/Number_of_reads_supporting_the_edition_for_each_sample_{res_type}.png"), res_type=RES_TYPE),
+        expand(os.path.normpath(OUTPUT_DIR + "/SPRINT/Percentages_of_reads_supporting_the_edition_for_each_sample_{res_type}.png"), res_type=RES_TYPE),
+        expand(os.path.normpath(OUTPUT_DIR + "/SPRINT/Summary_table_counts_SPRINT_{res_type}_by_strand.tsv"), res_type=RES_TYPE),
+        expand(os.path.normpath(OUTPUT_DIR + "/SPRINT/Summary_table_counts_SPRINT_{res_type}.tsv"), res_type=RES_TYPE),
         #RNAEditingIndexer
         os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/summary/EditingIndex.csv"),
         os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/Coverage_by_base_reference_by_sample.png"),

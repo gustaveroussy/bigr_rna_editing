@@ -10,7 +10,7 @@ This rule makes the sorting of bam files with samtools
 """
 rule samtools_sort:
     input:
-        bam=os.path.normpath(OUTPUT_DIR + "/SPRINT/{sample_name}/{sample_name}.bam")
+        bam=os.path.normpath(OUTPUT_DIR + "/SPRINT/{sample_name}/tmp/genome/all.bam")
     output:
         bam=temp(os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/input/{sample_name}.sortedByCoord.bam"))
     threads:
@@ -44,10 +44,22 @@ rule RNAEditingIndexer:
         log=os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/output/log/"),
         cmpileup=os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/output/cmpileup/"),
         summary=os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/output/summary/"),
-        ref=config["reference"]
+        ref=config["reference"],
+        extra=config["RNAEditingIndexer_extra"] if "RNAEditingIndexer_extra" in config else ""
     shell:
         """
-        /mnt/beegfs/userdata/m_aglave/RNAEditingIndexer/RNAEditingIndex --ts 1 --tsd {threads} -d {params.bam_dir} -f .sortedByCoord.bam -l {params.log} -o {params.cmpileup} -os {params.summary} --genome {params.ref} --verbose
+        singularity exec --no-home -B{OUTPUT_DIR} {PIPELINE_DIR}/envs/singularity/SPRINT.simg \
+        /mnt/beegfs/userdata/m_aglave/RNAEditingIndexer/RNAEditingIndex \
+        {params.extra} \
+        --ts 1 \
+        --tsd {threads} \
+        -d {params.bam_dir} \
+        -f .sortedByCoord.bam \
+        -l {params.log} \
+        -o {params.cmpileup} \
+        -os {params.summary} \
+        --genome {params.ref} \
+        --verbose
 
         """
 
@@ -72,6 +84,6 @@ rule RNAEditingIndexer_summary:
     shell:
         """
         singularity exec --no-home -B{PIPELINE_DIR},{OUTPUT_DIR} {PIPELINE_DIR}/envs/singularity/R_graphs.simg \
-        RScript {PIPELINE_DIR}/script/RNAEditingIndexer_summary_results.R --EditingIndex {input.table} --samples_order_for_ggplot {params.samples_order_for_ggplot}
+        Rscript {PIPELINE_DIR}/scripts/RNAEditingIndexer_summary_results.R --EditingIndex {input.table} --samples_order_for_ggplot {params.samples_order_for_ggplot}
 
         """

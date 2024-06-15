@@ -15,6 +15,8 @@ You can copy the example from config/config.yaml.
 - **output_dir**: absolute path to the output directory where results will be saved.
 - **reference**: the reference to use for the alignment and the idetification of editing events. Possible choices are hg19, hg38, mm10 or mm9. The reference will be downloaded from the UCSC web site.
 - **samples_order_for_ggplot**: the order of samples for the x axis of graphs (you can group samples by condition for example). Default is alphabetical order.
+- **SPRINT_extra**: extra parameters for "SPRINT main" command.
+- **RNAEditingIndexer_extra**: extra parameters for "RNAEditingIndexer" command.
 
 ### Design file
 It must be a comma separated file (.csv where comma is ",") with 3 columns:

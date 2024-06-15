@@ -74,8 +74,8 @@ rule fastp:
         R1_fq = get_fq_R1,
         R2_fq = get_fq_R2
     output:
-        R1_fq=os.path.normpath(OUTPUT_DIR + "/fastp/trimmed/{sample_name}_R1.fastq.gz"),
-        R2_fq=os.path.normpath(OUTPUT_DIR + "/fastp/trimmed/{sample_name}_R2.fastq.gz"),
+        R1_fq=os.path.normpath(OUTPUT_DIR + "/fastp/trimmed/{sample_name}_R1.fastq"),
+        R2_fq=os.path.normpath(OUTPUT_DIR + "/fastp/trimmed/{sample_name}_R2.fastq"),
         html=temp(os.path.normpath(OUTPUT_DIR + "/fastp/html/{sample_name}.fastp.html")),
         json=temp(os.path.normpath(OUTPUT_DIR + "/fastp/json/{sample_name}.fastp.json"))
     threads:
@@ -109,7 +109,8 @@ rule multiqc:
         expand(os.path.normpath(OUTPUT_DIR + "/fastp/html/{sample_name}.fastp.html"),sample_name=SAMPLE_NAME),
         expand(os.path.normpath(OUTPUT_DIR + "/fastp/json/{sample_name}.fastp.json"),sample_name=SAMPLE_NAME)
     output:
-        os.path.normpath(OUTPUT_DIR + "/multiqc.html")
+        os.path.normpath(OUTPUT_DIR + "/multiqc_report.html"),
+        temp(directory(os.path.normpath(OUTPUT_DIR + "/multiqc_data")))
     threads:
         1
     resources:
@@ -119,8 +120,8 @@ rule multiqc:
         PIPELINE_DIR + "/envs/conda/multiqc.yaml"
     shell:
         """
-        #multiqc {OUTPUT_DIR}/fastp {OUTPUT_DIR}/fastqc
-        multiqc .
+        cd {OUTPUT_DIR}
+        multiqc ./fastp ./fastqc
 
         """
         
