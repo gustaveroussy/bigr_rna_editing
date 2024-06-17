@@ -1,0 +1,57 @@
+Bootstrap: docker
+From: biocontainers/biocontainers:latest
+
+#build image
+#sudo singularity build RNAEditingIndexer.simg RNAEditingIndexer.def
+#using image
+#singularity shell -B local_folder:/WORKDIR/container_folder RNAEditingIndexer.simg
+#singularity exec -B local_folder:/WORKDIR/container_folder RNAEditingIndexer.simg bash /bin/AEI/RNAEditingIndexer/RNAEditingIndex <arguments>
+
+%environment
+	export DEV_ROOT=/bin/AEI/RNAEditingIndexer
+	export BEDTOOLS_PATH=bedtools
+	export SAMTOOLS_PATH=samtools
+	export RESOURCES_DIR=/bin/AEI/RNAEditingIndexer/Resources
+	export JAVA_HOME=/opt/conda
+	export BAM_UTILS_PATH=bam
+	export PYTHON27_PATH=python
+	export DONT_DOWNLOAD=false
+	export DONT_WRITE=false
+	export IS_UNIX=true
+	export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/conda/bin:/home/biodocker/bin:/bin/AEI/RNAEditingIndexer
+%post
+	conda config --set ssl_verify false && \
+	conda install -c bioconda samtools=1.9 && \
+	conda install -c bioconda bedtools=2.27.1 && \
+	conda install -c bioconda bamutil=1.0.14 && \
+	conda install -c bioconda java-jdk=8.0.92 && \
+	conda install python=2.7.16
+	
+	mkdir -p /bin/AEI &&\
+	cd /bin/AEI &&\
+	git clone https://github.com/shalomhillelroth/RNAEditingIndexer
+	
+	export DEV_ROOT=/bin/AEI/RNAEditingIndexer && \
+	export BEDTOOLS_PATH=bedtools && \
+	export SAMTOOLS_PATH=samtools && \
+	export RESOURCES_DIR=/bin/AEI/RNAEditingIndexer/Resources && \
+	export JAVA_HOME=/opt/conda && \
+	export BAM_UTILS_PATH=bam && \
+	export PYTHON27_PATH=python && \
+	export DONT_DOWNLOAD=false && \
+	export DONT_WRITE=false && \
+	export IS_UNIX=true && \
+	export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/conda/bin:/home/biodocker/bin:/bin/AEI/RNAEditingIndexer && \
+	
+	cd /bin/AEI/RNAEditingIndexer && make
+	
+	bedtools getfasta -name -bedOut -fi '/bin/AEI/RNAEditingIndexer/Resources/Genomes/HomoSapiens/ucscHg38Genome.fa' -bed '/bin/AEI/RNAEditingIndexer/Resources/Regions/HomoSapiens/ucscHg38Alu.bed.gz'
+    cd /bin/AEI/RNAEditingIndexer/Resources/Genomes/HomoSapiens
+    samtools faidx ucscHg38Genome.fa
+    samtools faidx ucscHg19Genome.fa
+    cd /bin/AEI/RNAEditingIndexer/Resources/Genomes/MusMusculus/
+    samtools faidx ucscMM9Genome.fa
+    samtools faidx ucscMm10Genome.fa
+    
+%labels
+    Author Marine AGLAVE

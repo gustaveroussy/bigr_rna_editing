@@ -74,6 +74,7 @@ rule SPRINT_index:
         -t {OUTPUT_DIR}/SPRINT/index/{REF}.refGene.gtf \
         {OUTPUT_DIR}/SPRINT/index/{REF}.fa \
         bwa
+        chmod -R 755 {OUTPUT_DIR}/SPRINT/index
 
         """
 

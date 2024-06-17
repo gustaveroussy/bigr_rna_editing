@@ -48,8 +48,8 @@ rule RNAEditingIndexer:
         extra=config["RNAEditingIndexer_extra"] if "RNAEditingIndexer_extra" in config else ""
     shell:
         """
-        singularity exec --no-home -B{OUTPUT_DIR} {PIPELINE_DIR}/envs/singularity/SPRINT.simg \
-        /mnt/beegfs/userdata/m_aglave/RNAEditingIndexer/RNAEditingIndex \
+        singularity exec --no-home -B{OUTPUT_DIR} {PIPELINE_DIR}/envs/singularity/RNAEditingIndexer.simg \
+        /bin/AEI/RNAEditingIndexer/RNAEditingIndex \
         {params.extra} \
         --ts 1 \
         --tsd {threads} \
@@ -59,7 +59,7 @@ rule RNAEditingIndexer:
         -o {params.cmpileup} \
         -os {params.summary} \
         --genome {params.ref} \
-        --verbose
+        --verbose || rm {output}
 
         """
 

@@ -1,0 +1,24 @@
+Bootstrap: docker
+From: biocontainers/biocontainers:latest
+
+#build image
+#sudo singularity build SPRINT.simg SPRINT.def
+#using image
+#singularity shell -B local_folder:/WORKDIR/container_folder SPRINT.simg
+#singularity exec -B local_folder:/WORKDIR/container_folder SPRINT.simg bash /bin/SPRINT/ <arguments>
+
+%environment
+	export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/conda/bin:/home/biodocker/bin
+%post
+	conda config --set ssl_verify false && \
+	conda install -c bioconda samtools=1.2 && \
+	conda install -c bioconda bwa=0.7.12 && \
+	conda install python=2.7.16
+
+	cd /bin/ && \
+	git clone https://github.com/jumphone/SPRINT
+	cd SPRINT && python setup.py install
+
+
+%labels
+    Author Marine AGLAVE

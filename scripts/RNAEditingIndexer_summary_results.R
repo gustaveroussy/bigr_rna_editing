@@ -1,5 +1,6 @@
 ### script to summarise results from Editing analysis by RNAEditingIndexer.
 
+pdf(NULL)
 library(optparse)
 library(ggplot2)
 library(stringr)

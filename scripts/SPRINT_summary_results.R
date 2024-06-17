@@ -1,5 +1,6 @@
 ### script to summarise results from Editing analysis by SPRINT.
 
+pdf(NULL)
 library(optparse)
 library(ggplot2)
 library(stringr)
@@ -23,12 +24,13 @@ for(res_type in c("identified_all", "identified_hyper", "identified_regular")){
     
     ## get files names
     files <- paste0(data_path,list.files(path = data_path, pattern = paste0("SPRINT_",res_type,".res"), recursive = TRUE))
-
+    nb_samples <- length(files)
+    
     ## load and format data
     df <- data.frame()
     for(file in files){
-      sample_name=strsplit(file,"/",fixed=T)[[1]]
-      sample_name[length(sample_name)-1]
+      sample_name <- strsplit(file,"/",fixed=T)[[1]]
+      sample_name <- sample_name[length(sample_name)-1]
       tmp_df <- read.table(file, sep="\t", header=FALSE)
       tmp_df$samples=sample_name
       df <- rbind(df,tmp_df)
@@ -44,9 +46,10 @@ for(res_type in c("identified_all", "identified_hyper", "identified_regular")){
     df$total_reads <- str_split_fixed( df$`AD:DP`, ":", 2)[,2]
     df$percent_reads_supporting <- apply(df, 1, function(x){ round((as.numeric(x[5])*100)/as.numeric(x[9]),2) })
     sub_df <- table(df[,c("type","samples")])
-    write.table(sub_df, file=paste0(data_output, "Summary_table_counts_SPRINT_",res_type,".tsv"), sep="\t", quote=FALSE)
+    sub_df <- data.frame(edition_types = rownames(sub_df), data.frame(rbind(sub_df)))
+    write.table(sub_df, file=paste0(data_output, "Summary_table_counts_SPRINT_",res_type,".tsv"), sep="\t", row.names = FALSE, quote=FALSE)
     sub_df <- table(df[,c("type","samples","strand")])
-    write.table(sub_df, file=paste0(data_output, "Summary_table_counts_SPRINT_",res_type,"_by_strand.tsv"), sep="\t", quote=FALSE)
+    write.table(sub_df, file=paste0(data_output, "Summary_table_counts_SPRINT_",res_type,"_by_strand.tsv"), sep="\t", row.names = FALSE, quote=FALSE)
     
     ## graphs
     #number of all edition by sample
@@ -56,7 +59,7 @@ for(res_type in c("identified_all", "identified_hyper", "identified_regular")){
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
       ylab("Number of edition") +
       xlab("")
-    ggsave(paste0(data_output, "Number_of_all_edition_by_sample_",res_type,".png"), width = 8, height = 5)
+    ggsave(paste0(data_output, "Number_of_all_edition_by_sample_",res_type,".png"), width = 1*nb_samples, height = 5)
     
     #number of each Edition by sample
     ggplot(data=df, aes(x=samples, fill=type)) +
@@ -65,7 +68,7 @@ for(res_type in c("identified_all", "identified_hyper", "identified_regular")){
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
       ylab("Number of edition") +
       xlab("")
-    ggsave(paste0(data_output, "Number_of_each_edition_by_sample_",res_type,".png"), width = 16, height = 5)
+    ggsave(paste0(data_output, "Number_of_each_edition_by_sample_",res_type,".png"), width = 2*nb_samples, height = 5)
     
     #number of each Edition by sample (log y scale)
     ggplot(data=df, aes(x=samples, fill=type)) +
@@ -75,7 +78,7 @@ for(res_type in c("identified_all", "identified_hyper", "identified_regular")){
       scale_y_continuous(trans="log10") + 
       ylab("Number of edition (log10 scale)") +
       xlab("")
-    ggsave(paste0(data_output, "Number_of_each_edition_by_sample_log_y_scale_",res_type,".png"), width = 16, height = 5)
+    ggsave(paste0(data_output, "Number_of_each_edition_by_sample_log_y_scale_",res_type,".png"), width = 2*nb_samples, height = 5)
     
     #number and percentage of read supporting the Edition by sample
     plot_percent <- list()
@@ -94,11 +97,13 @@ for(res_type in c("identified_all", "identified_hyper", "identified_regular")){
               ggtitle(sample) +
               xlab("Number of reads supporting the edition")
     }
-    png(paste0(data_output, "Percentages_of_reads_supporting_the_edition_for_each_sample_",res_type,".png"), width = 500, height = 4500)
-    wrap_plots(plot_percent, nrow=length(plot_percent))
+    png(paste0(data_output, "Percentages_of_reads_supporting_the_edition_for_each_sample_",res_type,".png"), width = 500, height = 400*nb_samples)
+    print(wrap_plots(plot_percent, nrow=length(plot_percent)))
     dev.off()
-    png(paste0(data_output, "Number_of_reads_supporting_the_edition_for_each_sample_",res_type,".png"), width = 500, height = 4500)
-    wrap_plots(plot_count, nrow=length(plot_count))
+    png(paste0(data_output, "Number_of_reads_supporting_the_edition_for_each_sample_",res_type,".png"), width = 500, height = 400*nb_samples)
+    print(wrap_plots(plot_count, nrow=length(plot_count)))
     dev.off()
 
 }
+
+Sys.sleep(10)
