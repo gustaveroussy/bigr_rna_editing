@@ -41,9 +41,9 @@ rule RNAEditingIndexer:
         time_min = (lambda wildcards, attempt: attempt * 720)
     params:
         bam_dir=os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/input/"),
-        log=os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/output/log/"),
-        cmpileup=os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/output/cmpileup/"),
-        summary=os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/output/summary/"),
+        log=os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/log/"),
+        cmpileup=os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/cmpileup/"),
+        summary=os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/summary/"),
         ref=config["reference"],
         extra=config["RNAEditingIndexer_extra"] if "RNAEditingIndexer_extra" in config else ""
     shell:
@@ -59,7 +59,7 @@ rule RNAEditingIndexer:
         -o {params.cmpileup} \
         -os {params.summary} \
         --genome {params.ref} \
-        --verbose || rm {output}
+        --verbose || rm -r {OUTPUT_DIR}/RNAEditingIndexer/output
 
         """
 
@@ -84,6 +84,6 @@ rule RNAEditingIndexer_summary:
     shell:
         """
         singularity exec --no-home -B{PIPELINE_DIR},{OUTPUT_DIR} {PIPELINE_DIR}/envs/singularity/R_graphs.simg \
-        Rscript {PIPELINE_DIR}/scripts/RNAEditingIndexer_summary_results.R --EditingIndex {input.table} --samples_order_for_ggplot {params.samples_order_for_ggplot}
+        Rscript {PIPELINE_DIR}/scripts/RNAEditingIndexer_summary_results.R --EditingIndex {input.table} --samples_order_for_ggplot {params.samples_order_for_ggplot}  
 
         """

@@ -20,6 +20,7 @@ From: biocontainers/biocontainers:latest
 	export IS_UNIX=true
 	export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/conda/bin:/home/biodocker/bin:/bin/AEI/RNAEditingIndexer
 %post
+	#install conda dependencies
 	conda config --set ssl_verify false && \
 	conda install -c bioconda samtools=1.9 && \
 	conda install -c bioconda bedtools=2.27.1 && \
@@ -27,10 +28,12 @@ From: biocontainers/biocontainers:latest
 	conda install -c bioconda java-jdk=8.0.92 && \
 	conda install python=2.7.16
 	
+	#download RNAEditingIndexer
 	mkdir -p /bin/AEI &&\
 	cd /bin/AEI &&\
 	git clone https://github.com/shalomhillelroth/RNAEditingIndexer
 	
+	#set environment variable
 	export DEV_ROOT=/bin/AEI/RNAEditingIndexer && \
 	export BEDTOOLS_PATH=bedtools && \
 	export SAMTOOLS_PATH=samtools && \
@@ -43,15 +46,17 @@ From: biocontainers/biocontainers:latest
 	export IS_UNIX=true && \
 	export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/conda/bin:/home/biodocker/bin:/bin/AEI/RNAEditingIndexer && \
 	
+	#compile RNAEditingIndexer
 	cd /bin/AEI/RNAEditingIndexer && make
 	
-	bedtools getfasta -name -bedOut -fi '/bin/AEI/RNAEditingIndexer/Resources/Genomes/HomoSapiens/ucscHg38Genome.fa' -bed '/bin/AEI/RNAEditingIndexer/Resources/Regions/HomoSapiens/ucscHg38Alu.bed.gz'
-    cd /bin/AEI/RNAEditingIndexer/Resources/Genomes/HomoSapiens
-    samtools faidx ucscHg38Genome.fa
-    samtools faidx ucscHg19Genome.fa
-    cd /bin/AEI/RNAEditingIndexer/Resources/Genomes/MusMusculus/
-    samtools faidx ucscMM9Genome.fa
-    samtools faidx ucscMm10Genome.fa
+	#create indexes (.fai) of fasta files
+	cd /bin/AEI/RNAEditingIndexer/Resources/Genomes/HomoSapiens
+	samtools faidx ucscHg38Genome.fa
+	samtools faidx ucscHg19Genome.fa
+	cd /bin/AEI/RNAEditingIndexer/Resources/Genomes/MusMusculus/
+	samtools faidx ucscMM9Genome.fa
+	samtools faidx ucscMm10Genome.fa
     
 %labels
     Author Marine AGLAVE
+

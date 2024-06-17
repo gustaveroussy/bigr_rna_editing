@@ -13,14 +13,14 @@ set.seed(1234)
 option_list <- list(
   ### Project
   make_option("--EditingIndex", help="Path to the result table of RNAEditingIndexer analysis"),
-  make_option("--samples_order_for_ggplot", help="Samples order for ggplot"),
+  make_option("--samples_order_for_ggplot", help="Samples order for ggplot")
 )
 parser <- OptionParser(usage="Rscript %prog [options]", description = " ", option_list = option_list)
 args <- parse_args(parser, positional_arguments = 0)
 ggplot_samples_x_order <- unlist(stringr::str_split(args$options$samples_order_for_ggplot, ","))
-files <- args$options$EditingIndex
+if (length(ggplot_samples_x_order) == 1) ggplot_samples_x_order <- NULL
+file <- args$options$EditingIndex
 data_output <- gsub("summary/EditingIndex.csv", "", file)
-
 
 ## load and format data
 df <- read.table(file, sep=",", header=TRUE)
@@ -41,12 +41,9 @@ df <- df[,column_to_keep]
 
 ## format
 column_to_keep <- grep("^StrandDecidingMethod$|^Sample$|EditingIndex", colnames(df), value = TRUE)
-
 df_pivot <- df %>% select(all_of(column_to_keep)) %>% pivot_longer(cols = A2CEditingIndex:C2TEditingIndex,
-                                names_to = "Edition_types",
-                                values_to = "Edition_score") %>% as.data.frame()
-
-head(df_pivot)
+                                                                   names_to = "Edition_types",
+                                                                   values_to = "Edition_score") %>% as.data.frame()
 df_pivot$Edition_types <- str_replace(str_replace(df_pivot$Edition_types, "2", "-to-"), "EditingIndex", "")
 sub_df_pivot <- subset(df_pivot, StrandDecidingMethod  == "RefSeqThenMMSites")
 
