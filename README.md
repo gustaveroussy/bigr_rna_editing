@@ -1,8 +1,6 @@
 # rna-editing
 This pipeline uses SPRINT and RNAEditingIndexer to identify editing events from paired-end RNA-seq data.
 
-Be careful: this pipeline is in testing!
-
 ## Installation
 The pipeline is already installed on the Flamingo cluster of Gustave Roussy.  
 It is localized here: /mnt/beegfs/pipelines/rna-editing/<version>
@@ -10,7 +8,6 @@ It is localized here: /mnt/beegfs/pipelines/rna-editing/<version>
 ## Using
 You need to make 2 files: a design file and a configuration file.   
 ### Configuration file
-You can copy the example from config/config.yaml.
 - **design**: absolute path to your design.csv file.
 - **output_dir**: absolute path to the output directory where results will be saved.
 - **reference**: the reference to use for the alignment and the idetification of editing events. Possible choices are hg19, hg38, mm10 or mm9. The reference will be downloaded from the UCSC web site.
@@ -59,7 +56,7 @@ Example of script:
 #SBATCH --partition=longq
 
 source /mnt/beegfs/software/conda/etc/profile.d/conda.sh
-conda activate /mnt/beegfs/userdata/m_aglave/.environnement_conda/scRNAseq_10X_user
+conda activate /mnt/beegfs/userdata/m_aglave/.environnement_conda/<my_conda_env_with_snakemake>
 module load singularity
 
 Editing_pipeline="/mnt/beegfs/pipelines/rna-editing/<version>/"
