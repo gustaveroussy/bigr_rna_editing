@@ -14,10 +14,19 @@ You can copy the example from config/config.yaml.
 - **design**: absolute path to your design.csv file.
 - **output_dir**: absolute path to the output directory where results will be saved.
 - **reference**: the reference to use for the alignment and the idetification of editing events. Possible choices are hg19, hg38, mm10 or mm9. The reference will be downloaded from the UCSC web site.
-- **samples_order_for_ggplot**: the order of samples for the x axis of graphs (you can group samples by condition for example). Default is alphabetical order.
+- **samples_order_for_ggplot**: the order of samples for the x axis of graphs (you can order samples by condition for example). Default is alphabetical order.
 - **SPRINT_extra**: extra parameters for "SPRINT main" command.
 - **RNAEditingIndexer_extra**: extra parameters for "RNAEditingIndexer" command.
 
+Example:
+```
+design: "/mnt/beegfs/scratch/m_aglave/Editing_analysis/script/design.csv"
+output_dir: "/mnt/beegfs/scratch/m_aglave/Editing_analysis/data_output/"
+reference: "hg38"
+samples_order_for_ggplot: "S1_patient,S3_patient,S2_patient"
+SPRINT_extra: ""
+RNAEditingIndexer_extra: ""
+```
 ### Design file
 It must be a comma separated file (.csv where comma is ",") with 3 columns:
 - **sample_id**: the sample name of you sample (it could be different that your fastq files).
@@ -27,8 +36,9 @@ It must be a comma separated file (.csv where comma is ",") with 3 columns:
 Example:
 ```
 sample_id,R1_fastq,R2_fastq
-S1_patient,/mnt/beegfs/scratch/m_aglave/Edition_RNA/data_input/S1-patient_R1.fastq.gz,/mnt/beegfs/scratch/m_aglave/Edition_RNA/data_input/S1-patient_R2.fastq.gz
-S2_patient,/mnt/beegfs/scratch/m_aglave/Edition_RNA/data_input/S2-patient_R1.fastq.gz,/mnt/beegfs/scratch/m_aglave/Edition_RNA/data_input/S2-patient_R2.fastq.gz
+S1_patient,/mnt/beegfs/scratch/m_aglave/Editing_analysis/data_input/S1-patient_R1.fastq.gz,/mnt/beegfs/scratch/m_aglave/Editing_analysis/data_input/S1-patient_R2.fastq.gz
+S2_patient,/mnt/beegfs/scratch/m_aglave/Editing_analysis/data_input/S2-patient_R1.fastq.gz,/mnt/beegfs/scratch/m_aglave/Editing_analysis/data_input/S2-patient_R2.fastq.gz
+S3_patient,/mnt/beegfs/scratch/m_aglave/Editing_analysis/data_input/S3-patient_R1.fastq.gz,/mnt/beegfs/scratch/m_aglave/Editing_analysis/data_input/S3-patient_R2.fastq.gz
 ```
 > Notes:
 > - sample names mustn't contain special characters or spaces.
@@ -37,8 +47,9 @@ S2_patient,/mnt/beegfs/scratch/m_aglave/Edition_RNA/data_input/S2-patient_R1.fas
 ### Run
 You need snakemake (via conda) and singularity (via module load).  
 Don't forget to change the path to your configuration file.
-```
+
 Example of script:
+```
 #!/bin/bash
 #using: sbatch run.sh
 #SBATCH --job-name=Editing_analysis
@@ -52,6 +63,7 @@ conda activate /mnt/beegfs/userdata/m_aglave/.environnement_conda/scRNAseq_10X_u
 module load singularity
 
 Editing_pipeline="/mnt/beegfs/pipelines/rna-editing/<version>/"
+
 snakemake --profile ${Editing_pipeline}/profiles/slurm \
           -s ${Editing_pipeline}/Snakefile \
           --configfile path_to/my_configuration_file.yaml
@@ -75,4 +87,3 @@ https://academic.oup.com/bioinformatics/article/33/22/3538/4004872
 RNAEditingIndexer:  
 https://github.com/a2iEditing/RNAEditingIndexer  
 https://pubmed.ncbi.nlm.nih.gov/31636457/  
-
