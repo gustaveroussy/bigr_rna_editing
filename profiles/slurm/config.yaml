@@ -11,4 +11,4 @@ reason: false
 printshellcmds: true
 jobname: "{name}.{jobid}.snakejob"
 use-conda: true
-conda-prefix: /mnt/beegfs/scratch/m_aglave/test_Edition_TCGA/script/envs/conda
+conda-prefix: /mnt/beegfs/pipelines/bigr_rna_editing/1.0.0/envs/conda
