@@ -1,9 +1,9 @@
-# rna-editing
+# bigr_rna_editing
 This pipeline uses SPRINT and RNAEditingIndexer to identify editing events from paired-end RNA-seq data.
 
 ## Installation
 The pipeline is already installed on the Flamingo cluster of Gustave Roussy.  
-It is localized here: /mnt/beegfs/pipelines/rna-editing/<version>
+It is localized here: /mnt/beegfs/pipelines/bigr_rna_editing/<version>
 
 ## Using
 You need to make 2 files: a design file and a configuration file.   
@@ -59,7 +59,7 @@ source /mnt/beegfs/software/conda/etc/profile.d/conda.sh
 conda activate /mnt/beegfs/userdata/m_aglave/.environnement_conda/my_conda_env_with_snakemake
 module load singularity
 
-Editing_pipeline="/mnt/beegfs/pipelines/rna-editing/<version>/"
+Editing_pipeline="/mnt/beegfs/pipelines/bigr_rna_editing/<version>/"
 
 snakemake --profile ${Editing_pipeline}/profiles/slurm \
           -s ${Editing_pipeline}/Snakefile \
