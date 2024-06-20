@@ -107,10 +107,7 @@ rule multiqc:
         expand(os.path.normpath(OUTPUT_DIR + "/fastqc/{fq_name}_fastqc.html"),fq_name=FQ_NAME),
         expand(os.path.normpath(OUTPUT_DIR + "/fastqc/{fq_name}_fastqc.zip"),fq_name=FQ_NAME),
         expand(os.path.normpath(OUTPUT_DIR + "/fastp/html/{sample_name}.fastp.html"),sample_name=SAMPLE_NAME),
-        expand(os.path.normpath(OUTPUT_DIR + "/fastp/json/{sample_name}.fastp.json"),sample_name=SAMPLE_NAME),
-        temp(directory(os.path.normpath(OUTPUT_DIR + "/fastqc/"))),
-        temp(directory(os.path.normpath(OUTPUT_DIR + "/fastp/html/"))),
-        temp(directory(os.path.normpath(OUTPUT_DIR + "/fastp/json/")))
+        expand(os.path.normpath(OUTPUT_DIR + "/fastp/json/{sample_name}.fastp.json"),sample_name=SAMPLE_NAME)
     output:
         os.path.normpath(OUTPUT_DIR + "/multiqc_report.html"),
         temp(directory(os.path.normpath(OUTPUT_DIR + "/multiqc_data")))
