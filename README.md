@@ -55,7 +55,7 @@ Example of script:
 #SBATCH --partition=longq
 
 source /mnt/beegfs/software/miniconda/24.3.0/etc/profile.d/conda.sh
-conda activate /mnt/beegfs/pipelines/rna-editing/<version>/envs/conda/snakemake
+conda activate /mnt/beegfs/pipelines/bigr_rna_editing/<version>/envs/conda/snakemake
 module load singularity
 Editing_pipeline="/mnt/beegfs/pipelines/bigr_rna_editing/<version>/"
 
