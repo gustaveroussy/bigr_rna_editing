@@ -42,9 +42,8 @@ S3_patient,/mnt/beegfs/scratch/m_aglave/Editing_analysis/data_input/S3-patient_R
 > - fastq files must be gzipped.
 
 ### Run
-You need snakemake (via conda) and singularity (via module load).  
-Don't forget to change the path to your configuration file.
-
+You need snakemake (via conda) and singularity (via module load). They are already installed for you on Flamingo, just follow the example below.  
+Don't forget to change the version of the pipeline and the path to your configuration file.  
 Example of script:
 ```
 #!/bin/bash
@@ -52,18 +51,17 @@ Example of script:
 #SBATCH --job-name=Editing_analysis
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=5G
+#SBATCH --mem=250M
 #SBATCH --partition=longq
 
-source /mnt/beegfs/software/conda/etc/profile.d/conda.sh
-conda activate /mnt/beegfs/userdata/m_aglave/.environnement_conda/my_conda_env_with_snakemake
+source /mnt/beegfs/software/miniconda/24.3.0/etc/profile.d/conda.sh
+conda activate /mnt/beegfs/pipelines/rna-editing/<version>/envs/conda/snakemake
 module load singularity
-
 Editing_pipeline="/mnt/beegfs/pipelines/bigr_rna_editing/<version>/"
 
 snakemake --profile ${Editing_pipeline}/profiles/slurm \
           -s ${Editing_pipeline}/Snakefile \
-          --configfile path_to/my_configuration_file.yaml
+          --configfile <path_to/my_configuration_file.yaml>
 ```
 
 ## Steps of the pipeline
@@ -71,7 +69,7 @@ snakemake --profile ${Editing_pipeline}/profiles/slurm \
 2. QC & Trimming (fastQC, fastp & multiqc)
 3. BWA index generation (via SPRINT)
 3. BWA alignement (via SPRINT)
-4. Identification of Editing events (SPRINT)
+4. Identification of Editing events (SPRINT) (this step takes 2-3 days!)
 5. Summary of SPRINT results (R)
 6. Bam sorting (Samtools)
 7. Identification of Editing events (RNAEditingIndexer)

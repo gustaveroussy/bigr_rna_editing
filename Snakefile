@@ -86,11 +86,19 @@ for col in design.drop(columns = "sample_id").columns.tolist():
     SYMLINK_FILES.append(os.path.normpath(OUTPUT_DIR + "/symlink_input/" + design["sample_id"].iloc[line] + SUPPL_NAME + ".fastq.gz"))
 
 #samples_order_for_ggplot
-if "samples_order_for_ggplot" in config and config["samples_order_for_ggplot"] != None:
+if not "samples_order_for_ggplot" in config:
+    config["samples_order_for_ggplot"] = ",".join(sorted(design["sample_id"]))
+else:
+    if config["samples_order_for_ggplot"] == "" :
+        config["samples_order_for_ggplot"] = ",".join(sorted(design["sample_id"]))
     if not set(config["samples_order_for_ggplot"].split(",")).issubset(design["sample_id"]):
         sys.exit("Error sampes names of 'samples_order_for_ggplot' from config file don't match 'Sample_id' of design file.")
-else:
-    config["samples_order_for_ggplot"] = ",".join(SAMPLE_NAME)
+
+#extra parameters:
+if not "SPRINT_extra" in config:
+    config["SPRINT_extra"] = ""
+if not "RNAEditingIndexer_extra" in config:
+    config["RNAEditingIndexer_extra"] = ""
 
 #SPRINT type of results
 RES_TYPE=["identified_all", "identified_hyper", "identified_regular"]

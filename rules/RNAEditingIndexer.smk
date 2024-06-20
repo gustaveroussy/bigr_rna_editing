@@ -16,7 +16,7 @@ rule samtools_sort:
     threads:
         8
     resources:
-        mem_mb = (lambda wildcards, attempt: attempt * 10240),
+        mem_mb = (lambda wildcards, attempt: attempt * 40960),
         time_min = (lambda wildcards, attempt: attempt * 720)
     conda :
         PIPELINE_DIR + "/envs/conda/samtools.yaml"
