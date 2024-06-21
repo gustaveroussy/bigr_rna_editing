@@ -173,7 +173,7 @@ rule SPRINT_summary:
     threads:
         1
     resources:
-        mem_mb = (lambda wildcards, attempt: attempt * 5000),
+        mem_mb = (lambda wildcards, attempt: attempt * 2048),
         time_min = (lambda wildcards, attempt: attempt * 60)
     params:
         samples_order_for_ggplot=config["samples_order_for_ggplot"]

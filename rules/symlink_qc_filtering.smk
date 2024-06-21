@@ -81,7 +81,7 @@ rule fastp:
     threads:
         5
     resources:
-        mem_mb = (lambda wildcards, attempt: attempt * 4096),
+        mem_mb = (lambda wildcards, attempt: attempt * 1024),
         time_min = (lambda wildcards, attempt: attempt * 720)
     conda :
         PIPELINE_DIR + "/envs/conda/fastp.yaml"
@@ -114,7 +114,7 @@ rule multiqc:
     threads:
         1
     resources:
-        mem_mb = (lambda wildcards, attempt: attempt * 5120),
+        mem_mb = (lambda wildcards, attempt: attempt * 250),
         time_min = (lambda wildcards, attempt: attempt * 720)
     conda :
         PIPELINE_DIR + "/envs/conda/multiqc.yaml"

@@ -37,7 +37,7 @@ rule RNAEditingIndexer:
     threads:
         16
     resources:
-        mem_mb = (lambda wildcards, attempt: attempt * 40960),
+        mem_mb = (lambda wildcards, attempt: attempt * 20480),
         time_min = (lambda wildcards, attempt: attempt * 720)
     params:
         bam_dir=os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/input/"),
@@ -77,7 +77,7 @@ rule RNAEditingIndexer_summary:
     threads:
         1
     resources:
-        mem_mb = (lambda wildcards, attempt: attempt * 5120),
+        mem_mb = (lambda wildcards, attempt: attempt * 2048),
         time_min = (lambda wildcards, attempt: attempt * 60)
     params:
         samples_order_for_ggplot=config["samples_order_for_ggplot"]
