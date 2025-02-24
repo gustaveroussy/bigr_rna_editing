@@ -15,7 +15,12 @@ VERSION="1.1.0"
 git clone https://github.com/gustaveroussy/bigr_rna_editing.git ${VERSION}
 ```
 #### :two: Download Singularity images
-Download all singularity images from [Zenodo](https://zenodo.org/records/14916660) in the directory `/mnt/beegfs/pipelines/bigr_rna_editing/${VERSION}/envs/singularity/` of the cloned repository.
+Download all singularity images from [Zenodo](https://zenodo.org/records/14916660):
+```
+cd /mnt/beegfs/pipelines/bigr_rna_editing/${VERSION}/envs/singularity/
+wget https://zenodo.org/api/records/14916660/files-archive
+unzip files-archive
+```
 #### :three: Install Snakemake environment
 ```
 source /mnt/beegfs/software/miniconda/24.3.0/etc/profile.d/conda.sh
