@@ -54,7 +54,7 @@ rule SPRINT_index:
         os.path.normpath(OUTPUT_DIR + "/SPRINT/index/" + REF + ".fa.trans.fa.pac"),
         os.path.normpath(OUTPUT_DIR + "/SPRINT/index/" + REF + ".fa.trans.fa.sa")
     threads:
-        8
+        1 #8
     resources:
         mem_mb = (lambda wildcards, attempt: attempt * 30720),
         time_min = (lambda wildcards, attempt: attempt * 1440)
@@ -85,8 +85,8 @@ This rule makes the SPRINT analysis
 
 rule SPRINT:
     input:
-        R1_fq = os.path.normpath(OUTPUT_DIR + "/fastp/trimmed/{sample_name}_R1.fastq"), #do not take fastq.gz in input, only fastq files
-        R2_fq = os.path.normpath(OUTPUT_DIR + "/fastp/trimmed/{sample_name}_R2.fastq"),
+        R1_fq = os.path.normpath(OUTPUT_DIR + "/fastp/" + FQ_PATH + "/{sample_name}_R1.fastq"), #do not take fastq.gz in input, only fastq files
+        R2_fq = os.path.normpath(OUTPUT_DIR + "/fastp/" + FQ_PATH + "/{sample_name}_R2.fastq"),
         reference_fa = os.path.normpath(OUTPUT_DIR + "/SPRINT/index/" + REF + ".fa"),
         ref_files =[
             os.path.normpath(OUTPUT_DIR + "/SPRINT/index/" + REF + ".refGene.gtf"),

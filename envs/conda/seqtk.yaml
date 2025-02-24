@@ -1,0 +1,16 @@
+name: /mnt/beegfs/userdata/m_aglave/.environnement_conda/seqtk
+channels:
+  - conda-forge
+  - bioconda
+  - auto
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1=conda_forge
+  - _openmp_mutex=4.5=2_gnu
+  - libgcc=14.1.0=h77fa898_1
+  - libgcc-ng=14.1.0=h69a702a_1
+  - libgomp=14.1.0=h77fa898_1
+  - libzlib=1.2.13=h4ab18f5_6
+  - seqtk=1.4=he4a0461_2
+  - zlib=1.2.13=h4ab18f5_6
+prefix: /mnt/beegfs/userdata/m_aglave/.environnement_conda/seqtk

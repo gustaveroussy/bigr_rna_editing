@@ -4,48 +4,26 @@ These rules make the editing analysis by RNAEditingIndexer
 ##########################################################################
 """
 
-
-"""
-This rule makes the sorting of bam files with samtools
-"""
-rule samtools_sort:
-    input:
-        bam=os.path.normpath(OUTPUT_DIR + "/SPRINT/{sample_name}/tmp/genome/all.bam")
-    output:
-        bam=temp(os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/input/{sample_name}.sortedByCoord.bam"))
-    threads:
-        8
-    resources:
-        mem_mb = (lambda wildcards, attempt: attempt * 40960),
-        time_min = (lambda wildcards, attempt: attempt * 720)
-    conda :
-        PIPELINE_DIR + "/envs/conda/samtools.yaml"
-    shell:
-        """
-        samtools sort {input.bam} -o {output.bam} -@ {threads} -m {resources.mem_mb}M
-        """
-
-
 """
 This rule makes the RNAEditingIndexer analysis
 """
 rule RNAEditingIndexer:
     input:
-        bam_list=expand(os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/input/{sample_name}.sortedByCoord.bam"),sample_name=SAMPLE_NAME)
+        bam_list = os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/input/{sample_name}/{sample_name}.sortedByCoord.bam")
     output:
-        os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/summary/EditingIndex.csv")
+        res = temp(os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/tmp/{sample_name}/summary/EditingIndex.csv")),
+        log = temp(directory(os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/tmp/{sample_name}/log/"))),
+        cmpileup = temp(directory(os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/tmp/{sample_name}/cmpileup/"))),
+        summary = temp(directory(os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/tmp/{sample_name}/summary/")))
     threads:
-        16
+        8
     resources:
-        mem_mb = (lambda wildcards, attempt: attempt * 20480),
+        mem_mb = (lambda wildcards, attempt: attempt * 10240),
         time_min = (lambda wildcards, attempt: attempt * 720)
     params:
-        bam_dir=os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/input/"),
-        log=os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/log/"),
-        cmpileup=os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/cmpileup/"),
-        summary=os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/summary/"),
-        ref=config["reference"],
-        extra=config["RNAEditingIndexer_extra"] if "RNAEditingIndexer_extra" in config else ""
+        bam_dir = (lambda wildcards: os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/input/"+ wildcards.sample_name)),
+        ref = config["reference"],
+        extra = config["RNAEditingIndexer_extra"] if "RNAEditingIndexer_extra" in config else ""
     shell:
         """
         singularity exec --no-home -B{OUTPUT_DIR} {PIPELINE_DIR}/envs/singularity/RNAEditingIndexer.simg \
@@ -55,11 +33,39 @@ rule RNAEditingIndexer:
         --tsd {threads} \
         -d {params.bam_dir} \
         -f .sortedByCoord.bam \
-        -l {params.log} \
-        -o {params.cmpileup} \
-        -os {params.summary} \
+        -l {output.log} \
+        -o {output.cmpileup} \
+        -os {output.summary} \
         --genome {params.ref} \
-        --verbose || rm -r {OUTPUT_DIR}/RNAEditingIndexer/output
+        --verbose && \
+        rm -r {output.log}/flags && \
+        mkdir -p {OUTPUT_DIR}"/RNAEditingIndexer/log/" && \
+        for log_file in $(ls {output.log}); do mv {output.log}/$log_file {OUTPUT_DIR}/RNAEditingIndexer/log/; done
+
+        """
+
+"""
+This rule merge the RNAEditingIndexer results
+"""
+rule RNAEditingIndexer_merge:
+    input:
+        expand(os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/tmp/{sample_name}/summary/EditingIndex.csv"),sample_name=list(dict.fromkeys(SAMPLE_NAME)))
+    output:
+        os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/summary/EditingIndex.csv")
+    threads:
+        1
+    resources:
+        mem_mb = (lambda wildcards, attempt: attempt * 1024),
+        time_min = (lambda wildcards, attempt: attempt * 60)
+    shell:
+        """
+        input_files=({input})
+        head -n1 ${{input_files[1]}} > {output}
+        
+        for result in {input}
+        do
+            tail -n +2 ${{result}} >> {output}
+        done
 
         """
 
@@ -69,7 +75,7 @@ This rule makes the RNAEditingIndexer graphs
 """
 rule RNAEditingIndexer_summary:
     input:
-        table=os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/summary/EditingIndex.csv")
+        table = os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/summary/EditingIndex.csv")
     output:
         os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/Coverage_by_base_reference_by_sample.png"),
         os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/Scores_of_all_edition_by_sample.png"),
@@ -77,10 +83,10 @@ rule RNAEditingIndexer_summary:
     threads:
         1
     resources:
-        mem_mb = (lambda wildcards, attempt: attempt * 2048),
+        mem_mb = (lambda wildcards, attempt: attempt * 1024),
         time_min = (lambda wildcards, attempt: attempt * 60)
     params:
-        samples_order_for_ggplot=config["samples_order_for_ggplot"]
+        samples_order_for_ggplot = config["samples_order_for_ggplot"]
     shell:
         """
         singularity exec --no-home -B{PIPELINE_DIR},{OUTPUT_DIR} {PIPELINE_DIR}/envs/singularity/R_graphs.simg \

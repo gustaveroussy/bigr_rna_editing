@@ -105,6 +105,7 @@ if "resources" in job_properties:
             raise ValueError(
                 "Too much time requested: {}".format(str(arg_dict["time"]))
             )
+        arg_dict["partition"] = "bigmemq"
 
 
 # Threads

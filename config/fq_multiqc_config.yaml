@@ -1,0 +1,22 @@
+intro_text: "This report summarises the quality control of the fastq files."
+
+report_header_info:
+    - Contact E-mail: "bigr@gustaveroussy.fr"
+    - Application Type: "RNA-seq"
+
+custom_logo: "/mnt/beegfs/pipelines/bigr_rna_editing/dev/images/bigr_ContourBlanc_96dpi_100x100.png"
+custom_logo_title: "Bioinformatics Core Facility - Gustave Roussy"
+
+module_order:
+  - fastqc:
+      name: "Fastqc (Raw)"
+      path_filters:
+        - "*raw_fastqc/*_fastqc.zip"
+        - "*raw_fastqc/*_fastqc.html"
+  - fastp:
+      name: "Fastp"
+
+fn_clean_exts:
+    - ".fastq"
+    - ".fastq.gz"
+    - ".fastq.gz_*"

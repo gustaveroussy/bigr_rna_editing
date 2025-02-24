@@ -85,6 +85,21 @@ for col in design.drop(columns = "sample_id").columns.tolist():
     FQ_NAME.append(design["sample_id"].iloc[line] + SUPPL_NAME)
     SYMLINK_FILES.append(os.path.normpath(OUTPUT_DIR + "/symlink_input/" + design["sample_id"].iloc[line] + SUPPL_NAME + ".fastq.gz"))
 
+#reads sampling
+if not "nb_sampled_reads" in config or config["nb_sampled_reads"] == "" :
+    SAMPLING_BOOL = False
+else:
+    SAMPLING_BOOL = True
+    if not isinstance(config["nb_sampled_reads"], int) and config["nb_sampled_reads"] != "auto":
+        try:
+            config["nb_sampled_reads"] = int(config["nb_sampled_reads"])
+        except ValueError:
+            sys.exit("Error 'nb_sampled_reads' set is not a number (set a number of reads to be sampled, like 5000000 for 5 millions of reads.")
+if SAMPLING_BOOL:
+    FQ_PATH = "trimmed_sampled"
+else:
+    FQ_PATH = "trimmed"
+
 #samples_order_for_ggplot
 if not "samples_order_for_ggplot" in config:
     config["samples_order_for_ggplot"] = ",".join(sorted(design["sample_id"]))
@@ -110,9 +125,9 @@ sys.stderr.write("\n########################### Run ############################
 rule all:
     input:
         #symlink_qc_filtering
-        expand(os.path.normpath(OUTPUT_DIR + "/fastp/trimmed/{sample_name}_R1.fastq"), sample_name=SAMPLE_NAME),
-        expand(os.path.normpath(OUTPUT_DIR + "/fastp/trimmed/{sample_name}_R2.fastq"), sample_name=SAMPLE_NAME),
-        os.path.normpath(OUTPUT_DIR + "/multiqc_report.html"),
+        os.path.normpath(OUTPUT_DIR + "/multiqc_raw_data_report.html"),
+        #bam_qc_index
+        os.path.normpath(OUTPUT_DIR + "/multiqc_alignment_report.html"),
         #SPRINT
         expand(os.path.normpath(OUTPUT_DIR + "/SPRINT/{sample_name}/tmp/genome/all.bam"), sample_name=SAMPLE_NAME),
         expand(os.path.normpath(OUTPUT_DIR + "/SPRINT/{sample_name}/PARAMETER.txt"), sample_name=SAMPLE_NAME),
@@ -146,6 +161,7 @@ wildcard_constraints:
 
 include: "rules/symlink_qc_filtering.smk"
 include: "rules/SPRINT.smk"
+include: "rules/bam_qc_index.smk"
 include: "rules/RNAEditingIndexer.smk"
 
 
