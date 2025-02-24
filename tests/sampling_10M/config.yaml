@@ -1,0 +1,7 @@
+design: "/mnt/beegfs/pipelines/bigr_rna_editing/dev/tests/sampling_10M/design.csv"
+output_dir: "/mnt/beegfs/pipelines/bigr_rna_editing/dev/tests/sampling_10M/data_output/"
+reference: "hg38"
+samples_order_for_ggplot: ""
+SPRINT_extra: ""
+RNAEditingIndexer_extra: ""
+nb_sampled_reads: "10000000"
