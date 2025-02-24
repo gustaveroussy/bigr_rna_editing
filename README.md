@@ -2,8 +2,26 @@
 This pipeline uses SPRINT and RNAEditingIndexer to identify editing events from paired-end RNA-seq data.
 
 ## Installation
+
+### Gustave Roussy users
 The pipeline is already installed on the Flamingo cluster of Gustave Roussy.  
 It is localized here: /mnt/beegfs/pipelines/bigr_rna_editing/<version>
+
+### Admin : installation of a new version of the pipeline
+#### :one: Download pipeline
+```
+cd /mnt/beegfs/pipelines/bigr_rna_editing/
+VERSION="1.1.0"
+git clone https://github.com/gustaveroussy/bigr_rna_editing.git ${VERSION}
+```
+#### :two: Download Singularity images
+Download all singularity images from [Zenodo](https://zenodo.org/records/14916660) in the directory `/mnt/beegfs/pipelines/bigr_rna_editing/${VERSION}/envs/singularity/` of the cloned repository.
+#### :three: Install Snakemake environment
+```
+source /mnt/beegfs/software/miniconda/24.3.0/etc/profile.d/conda.sh
+conda env create -f /mnt/beegfs/pipelines/bigr_rna_editing/${VERSION}/envs/conda/snakemake.yaml --prefix=/mnt/beegfs/pipelines/bigr_rna_editing/${VERSION}/envs/compiled_conda/snakemake -y
+```
+You are now ready to use the pipeline!
 
 ## Using
 You need to make 2 files: a design file and a configuration file.   
