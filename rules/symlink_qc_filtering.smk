@@ -110,7 +110,7 @@ if SAMPLING_BOOL :
                 with open(file) as f:
                     lines = f.readlines()
                     all_nb_reads_after_filtering.append(int(lines[16].replace('\t\t\t"total_reads":', '').replace(',\n', '')))
-            config["nb_sampled_reads"] = max(min(all_nb_reads_after_filtering),50000000)
+            config["nb_sampled_reads"] = max(min(all_nb_reads_after_filtering),config["min_nb_sampled_reads_for_auto"])
         return config["nb_sampled_reads"]/2
     rule seqtk:
         input:

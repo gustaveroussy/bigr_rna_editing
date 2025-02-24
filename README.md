@@ -38,6 +38,7 @@ You need to make 2 files: a design file and a configuration file.
 - **SPRINT_extra** (optional): extra parameters for "SPRINT main" command.
 - **RNAEditingIndexer_extra** (optional): extra parameters for "RNAEditingIndexer" command.
 - **nb_sampled_reads** (optional): number of reads to sample. Possible choices are "" for no sampling, "50000000" for 50M of reads (can be another integer), or "auto" (to sample the minimum number of reads obtain throught all samples if > 50 millions, else 50 millions). If a sample has less than the threshold, all its reads are used.
+- **min_nb_sampled_reads_for_auto** (optional): minimum number of reads to sample if "nb_sampled_reads" is set to "auto". Defaut is 50M of reads.
 
 Example:
 ```
