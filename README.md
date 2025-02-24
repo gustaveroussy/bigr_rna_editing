@@ -29,9 +29,10 @@ You need to make 2 files: a design file and a configuration file.
 - **design**: absolute path to your design.csv file.
 - **output_dir**: absolute path to the output directory where results will be saved.
 - **reference**: the reference to use for the alignment and the idetification of editing events. Possible choices are hg19, hg38, mm10 or mm9. The reference will be downloaded from the UCSC web site.
-- **samples_order_for_ggplot**: the order of samples for the x axis of graphs (you can order samples by condition for example). Default is alphabetical order.
-- **SPRINT_extra**: extra parameters for "SPRINT main" command.
-- **RNAEditingIndexer_extra**: extra parameters for "RNAEditingIndexer" command.
+- **samples_order_for_ggplot** (optional): the order of samples for the x axis of graphs (you can order samples by condition for example). Default is alphabetical order.
+- **SPRINT_extra** (optional): extra parameters for "SPRINT main" command.
+- **RNAEditingIndexer_extra** (optional): extra parameters for "RNAEditingIndexer" command.
+- **nb_sampled_reads** (optional): number of reads to sample. Possible choices are "" for no sampling, "50000000" for 50M of reads (can be another integer), or "auto" (to sample the minimum number of reads obtain throught all samples if > 50 millions, else 50 millions). If a sample has less than the threshold, all its reads are used.
 
 Example:
 ```
@@ -84,14 +85,16 @@ snakemake --profile ${Editing_pipeline}/profiles/slurm \
 
 ## Steps of the pipeline
 1. Symbolic link of fastq files
-2. QC & Trimming (fastQC, fastp & multiqc)
+2. Reads QC & Trimming (fastQC, fastp & multiqc)
 3. BWA index generation (via SPRINT)
-3. BWA alignement (via SPRINT)
-4. Identification of Editing events (SPRINT) (this step takes 2-3 days!)
-5. Summary of SPRINT results (R)
-6. Bam sorting (Samtools)
-7. Identification of Editing events (RNAEditingIndexer)
-8. Summary of RNAEditingIndexer results (R)
+4. Sampling read (optional) (seqtk)
+5. BWA alignement (via SPRINT)
+6. Aligment QC (Samtools & multiqc)
+7. Identification of Editing events (SPRINT) (this step takes 2-3 days!)
+8. Summary of SPRINT results (R)
+9. Bam sorting (Samtools)
+10. Identification of Editing events (RNAEditingIndexer)
+11. Summary of RNAEditingIndexer results (R)
 
 Information about Editing tools:  
 SPRINT:  
