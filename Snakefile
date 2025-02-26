@@ -90,11 +90,22 @@ if not "nb_sampled_reads" in config or config["nb_sampled_reads"] == "" :
     SAMPLING_BOOL = False
 else:
     SAMPLING_BOOL = True
+    #set nb_sampled_reads
     if not isinstance(config["nb_sampled_reads"], int) and config["nb_sampled_reads"] != "auto":
         try:
             config["nb_sampled_reads"] = int(config["nb_sampled_reads"])
         except ValueError:
             sys.exit("Error 'nb_sampled_reads' set is not a number (set a number of reads to be sampled, like 5000000 for 5 millions of reads.")
+    #set min_nb_sampled_reads_for_auto
+    if config["nb_sampled_reads"] == "auto":
+        if not "min_nb_sampled_reads_for_auto" in config or config["min_nb_sampled_reads_for_auto"] == "" :
+            config["min_nb_sampled_reads_for_auto"] = 50000000
+        else:
+            if not isinstance(config["min_nb_sampled_reads_for_auto"], int):
+                try:
+                    config["min_nb_sampled_reads_for_auto"] = int(config["min_nb_sampled_reads_for_auto"])
+                except ValueError:
+                    sys.exit("Error 'min_nb_sampled_reads_for_auto' set is not a number (set a minimum number of reads to be sampled if 'nb_sampled_reads' is 'auto' mode, like 50000000 for 50 millions of reads.")
 if SAMPLING_BOOL:
     FQ_PATH = "trimmed_sampled"
 else:
