@@ -10,7 +10,7 @@ It is localized here: /mnt/beegfs/pipelines/bigr_rna_editing/<version>
 ### Admin : installation of a new version of the pipeline
 #### :one: Download pipeline
 ```
-cd /mnt/beegfs/pipelines/bigr_rna_editing/
+cd /mnt/beegfs02/pipelines/bigr_rna_editing/
 VERSION="1.1.0"
 git clone https://github.com/gustaveroussy/bigr_rna_editing.git ${VERSION}
 ```
@@ -80,8 +80,8 @@ Example of script:
 #SBATCH --partition=longq
 
 source /mnt/beegfs02/software/recherche/miniconda/25.1.1/etc/profile.d/conda.sh
-conda activate /mnt/beegfs02/pipelines/bigr_rna_editing/<version>/envs/conda/snakemake
-module load singularity
+conda activate /mnt/beegfs02/pipelines/bigr_rna_editing/<version>/envs/compiled_conda/snakemake
+module load singularity-ce
 Editing_pipeline="/mnt/beegfs02/pipelines/bigr_rna_editing/<version>/"
 
 snakemake --profile ${Editing_pipeline}/profiles/slurm \
