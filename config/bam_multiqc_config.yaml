@@ -4,7 +4,7 @@ report_header_info:
     - Contact E-mail: "bigr@gustaveroussy.fr"
     - Application Type: "RNA-seq"
 
-custom_logo: "/mnt/beegfs/pipelines/bigr_rna_editing/dev/images/bigr_ContourBlanc_96dpi_100x100.png"
+custom_logo: "/mnt/beegfs02/pipelines/bigr_rna_editing/dev/images/bigr_ContourBlanc_96dpi_100x100.png"
 custom_logo_title: "Bioinformatics Core Facility - Gustave Roussy"
 
 fn_clean_exts:

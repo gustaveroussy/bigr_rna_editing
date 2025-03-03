@@ -9,12 +9,10 @@ This rule makes the RNAEditingIndexer analysis
 """
 rule RNAEditingIndexer:
     input:
-        bam_list = os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/input/{sample_name}/{sample_name}.sortedByCoord.bam")
+        bam = os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/input/{sample_name}/{sample_name}.sortedByCoord.bam")
     output:
         res = temp(os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/tmp/{sample_name}/summary/EditingIndex.csv")),
-        log = temp(directory(os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/tmp/{sample_name}/log/"))),
-        cmpileup = temp(directory(os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/tmp/{sample_name}/cmpileup/"))),
-        summary = temp(directory(os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/tmp/{sample_name}/summary/")))
+        log = temp(directory(os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/tmp/{sample_name}/log/")))
     threads:
         8
     resources:
@@ -22,6 +20,8 @@ rule RNAEditingIndexer:
         time_min = (lambda wildcards, attempt: attempt * 720)
     params:
         bam_dir = (lambda wildcards: os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/input/"+ wildcards.sample_name)),
+        cmpileup = (lambda wildcards: os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/tmp/"+ wildcards.sample_name + "/cmpileup/")),
+        summary =(lambda wildcards: os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/tmp/"+ wildcards.sample_name + "/summary/")),
         ref = config["reference"],
         extra = config["RNAEditingIndexer_extra"] if "RNAEditingIndexer_extra" in config else ""
     shell:
@@ -34,8 +34,8 @@ rule RNAEditingIndexer:
         -d {params.bam_dir} \
         -f .sortedByCoord.bam \
         -l {output.log} \
-        -o {output.cmpileup} \
-        -os {output.summary} \
+        -o {params.cmpileup} \
+        -os {params.summary} \
         --genome {params.ref} \
         --verbose && \
         rm -r {output.log}/flags && \
@@ -59,9 +59,7 @@ rule RNAEditingIndexer_merge:
         time_min = (lambda wildcards, attempt: attempt * 60)
     shell:
         """
-        input_files=({input})
-        head -n1 ${{input_files[1]}} > {output}
-        
+        head -n1 {input[0]} > {output}
         for result in {input}
         do
             tail -n +2 ${{result}} >> {output}

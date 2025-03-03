@@ -1,16 +1,18 @@
-name: /mnt/beegfs/userdata/m_aglave/.environnement_conda/seqtk
+name: /home/m_aglave/tmp_environnements_conda/seqtk
 channels:
-  - conda-forge
-  - bioconda
-  - auto
   - defaults
+  - nodefaults
+  - bioconda
+  - conda-forge
+  - auto
+  - https://repo.anaconda.com/pkgs/main
+  - https://repo.anaconda.com/pkgs/r
 dependencies:
-  - _libgcc_mutex=0.1=conda_forge
-  - _openmp_mutex=4.5=2_gnu
-  - libgcc=14.1.0=h77fa898_1
-  - libgcc-ng=14.1.0=h69a702a_1
-  - libgomp=14.1.0=h77fa898_1
-  - libzlib=1.2.13=h4ab18f5_6
-  - seqtk=1.4=he4a0461_2
-  - zlib=1.2.13=h4ab18f5_6
-prefix: /mnt/beegfs/userdata/m_aglave/.environnement_conda/seqtk
+  - _libgcc_mutex=0.1=main
+  - _openmp_mutex=5.1=1_gnu
+  - libgcc=14.2.0=h767d61c_2
+  - libgomp=14.2.0=h767d61c_2
+  - libzlib=1.3.1=hb9d3cd8_2
+  - seqtk=1.4=h577a1d6_3
+  - zlib=1.3.1=hb9d3cd8_2
+prefix: /home/m_aglave/tmp_environnements_conda/seqtk

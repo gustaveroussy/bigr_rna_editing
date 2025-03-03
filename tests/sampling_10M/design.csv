@@ -1,4 +1,4 @@
 sample_id,R1_fastq,R2_fastq
-SRR8518122,/mnt/beegfs/scratch/bioinfo_core/B24069_SOPO_04/data_input/raw_download/SRR8518122_1.fastq.gz,/mnt/beegfs/scratch/bioinfo_core/B24069_SOPO_04/data_input/raw_download/SRR8518122_2.fastq.gz
-SRR8518123,/mnt/beegfs/scratch/bioinfo_core/B24069_SOPO_04/data_input/raw_download/SRR8518123_1.fastq.gz,/mnt/beegfs/scratch/bioinfo_core/B24069_SOPO_04/data_input/raw_download/SRR8518123_2.fastq.gz
-SRR8518124,/mnt/beegfs/scratch/bioinfo_core/B24069_SOPO_04/data_input/raw_download/SRR8518124_1.fastq.gz,/mnt/beegfs/scratch/bioinfo_core/B24069_SOPO_04/data_input/raw_download/SRR8518124_2.fastq.gz
+SRR8518122,/mnt/beegfs02/scratch/bioinfo_core/B24069_SOPO_04/data_input/raw_download/SRR8518122_1.fastq.gz,/mnt/beegfs02/scratch/bioinfo_core/B24069_SOPO_04/data_input/raw_download/SRR8518122_2.fastq.gz
+SRR8518123,/mnt/beegfs02/scratch/bioinfo_core/B24069_SOPO_04/data_input/raw_download/SRR8518123_1.fastq.gz,/mnt/beegfs02/scratch/bioinfo_core/B24069_SOPO_04/data_input/raw_download/SRR8518123_2.fastq.gz
+SRR8518124,/mnt/beegfs02/scratch/bioinfo_core/B24069_SOPO_04/data_input/raw_download/SRR8518124_1.fastq.gz,/mnt/beegfs02/scratch/bioinfo_core/B24069_SOPO_04/data_input/raw_download/SRR8518124_2.fastq.gz

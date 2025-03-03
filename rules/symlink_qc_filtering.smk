@@ -49,7 +49,7 @@ rule raw_fastqc:
         mem_mb = (lambda wildcards, attempt: attempt * 4096),
         time_min = (lambda wildcards, attempt: attempt * 720)
     conda :
-        PIPELINE_DIR + "/envs/conda/fastQC.yaml"
+        PIPELINE_DIR + "/envs/conda/fastqc.yaml"
     shell:
         """
         fastqc -o {OUTPUT_DIR}/raw_fastqc/ {input.fq_file}
@@ -146,7 +146,7 @@ if SAMPLING_BOOL :
             mem_mb = (lambda wildcards, attempt: attempt * 4096),
             time_min = (lambda wildcards, attempt: attempt * 720)
         conda :
-            PIPELINE_DIR + "/envs/conda/fastQC.yaml"
+            PIPELINE_DIR + "/envs/conda/fastqc.yaml"
         shell:
             """
             fastqc -o {OUTPUT_DIR}/sampled_fastqc/ {input}

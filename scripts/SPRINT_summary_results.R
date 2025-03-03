@@ -16,7 +16,6 @@ option_list <- list(
 parser <- OptionParser(usage="Rscript %prog [options]", description = " ", option_list = option_list)
 args <- parse_args(parser, positional_arguments = 0)
 ggplot_samples_x_order <- unlist(stringr::str_split(args$options$samples_order_for_ggplot, ","))
-if (length(ggplot_samples_x_order) == 1) ggplot_samples_x_order <- NULL
 data_path <- args$options$SPRINT_path
 data_output <- data_path
 
@@ -37,7 +36,7 @@ for(res_type in c("identified_all", "identified_hyper", "identified_regular")){
     }
     colnames(df) <- c("chromonsome", "start", "end", "type", "supporting", "strand", "AD:DP", "samples")
     df$samples <- factor(df$samples, level = ggplot_samples_x_order)
-    # change AC to A-to-C etc
+    #change AC to A-to-C etc
     first_base <- str_split_fixed(df$type, "", 2)[,1]
     second_base <- str_split_fixed(df$type, "", 2)[,2]
     df$type <- paste0(first_base,"-to-",second_base)
@@ -81,28 +80,48 @@ for(res_type in c("identified_all", "identified_hyper", "identified_regular")){
     ggsave(paste0(data_output, "Number_of_each_edition_by_sample_log_y_scale_",res_type,".png"), width = 2*nb_samples, height = 5)
     
     #number and percentage of read supporting the Edition by sample
-    plot_percent <- list()
-    plot_count <- list()
-    for (sample in unique(sort(df$samples))){
-      sub_sample_df <- df[ which(df$samples==sample), ]
-      plot_percent[[sample]] <- ggplot(data=sub_sample_df, aes(x=percent_reads_supporting, fill=type)) +
+    if(nb_samples == 1){
+      plot_percent <- ggplot(data=df, aes(x=percent_reads_supporting, fill=type)) +
               geom_histogram() +
               theme_classic() +
-              ggtitle(sample) +
+              ggtitle(unique(sort(df$samples))) +
               xlab("Percentages of reads supporting the edition")
-      plot_count[[sample]] <- ggplot(data=sub_sample_df, aes(x=supporting, fill=type)) +
+      plot_count <- ggplot(data=df, aes(x=supporting, fill=type)) +
               geom_histogram() +
-              scale_x_log10(breaks=c(1,2,3,4,5,10,max(sub_sample_df$supporting))) +
+              scale_x_log10(breaks=c(1,2,3,4,5,10,max(df$supporting))) +
               theme_classic() +
-              ggtitle(sample) +
+              ggtitle(unique(sort(df$samples))) +
               xlab("Number of reads supporting the edition")
+      png(paste0(data_output, "Percentages_of_reads_supporting_the_edition_for_each_sample_",res_type,".png"), width = 500, height = 400)
+      print(plot_percent)
+      dev.off()
+      png(paste0(data_output, "Number_of_reads_supporting_the_edition_for_each_sample_",res_type,".png"), width = 500, height = 400)
+      print(plot_count)
+      dev.off()
+    }else{ #several samples
+      plot_percent <- list()
+      plot_count <- list()
+      for (sample in unique(sort(df$samples))){
+        sub_sample_df <- df[ which(df$samples==sample), ]
+        plot_percent[[sample]] <- ggplot(data=sub_sample_df, aes(x=percent_reads_supporting, fill=type)) +
+                geom_histogram() +
+                theme_classic() +
+                ggtitle(sample) +
+                xlab("Percentages of reads supporting the edition")
+        plot_count[[sample]] <- ggplot(data=sub_sample_df, aes(x=supporting, fill=type)) +
+                geom_histogram() +
+                scale_x_log10(breaks=c(1,2,3,4,5,10,max(sub_sample_df$supporting))) +
+                theme_classic() +
+                ggtitle(sample) +
+                xlab("Number of reads supporting the edition")
+      }
+      png(paste0(data_output, "Percentages_of_reads_supporting_the_edition_for_each_sample_",res_type,".png"), width = 500, height = 400*nb_samples)
+      print(wrap_plots(plot_percent, nrow=length(plot_percent)))
+      dev.off()
+      png(paste0(data_output, "Number_of_reads_supporting_the_edition_for_each_sample_",res_type,".png"), width = 500, height = 400*nb_samples)
+      print(wrap_plots(plot_count, nrow=length(plot_count)))
+      dev.off()
     }
-    png(paste0(data_output, "Percentages_of_reads_supporting_the_edition_for_each_sample_",res_type,".png"), width = 500, height = 400*nb_samples)
-    print(wrap_plots(plot_percent, nrow=length(plot_percent)))
-    dev.off()
-    png(paste0(data_output, "Number_of_reads_supporting_the_edition_for_each_sample_",res_type,".png"), width = 500, height = 400*nb_samples)
-    print(wrap_plots(plot_count, nrow=length(plot_count)))
-    dev.off()
 
 }
 

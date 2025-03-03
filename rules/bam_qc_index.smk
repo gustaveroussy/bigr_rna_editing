@@ -8,14 +8,19 @@ rule samtools_sort:
     output:
         temp(os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/input/{sample_name}/{sample_name}.sortedByCoord.bam"))
     threads:
-        8
+        4
     resources:
         mem_mb = (lambda wildcards, attempt: attempt * 40960),
         time_min = (lambda wildcards, attempt: attempt * 350)
     conda :
         PIPELINE_DIR + "/envs/conda/samtools.yaml"
     shell:
-        "samtools sort {input} -o {output} -@ {threads} -m {resources.mem_mb}M"
+        """
+        res_mem=$(({resources.mem_mb}-2000))
+        echo $res_mem
+        res_mem=$(echo $res_mem"M")
+        samtools sort {input} -o {output} -@ {threads} -m $res_mem
+        """
 
 rule samtools_index:
     input:
@@ -54,8 +59,8 @@ rule samtools_stats:
 
 rule samtools_idxstats:
     input:
-        os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/input/{sample_name}/{sample_name}.sortedByCoord.bam"),
-        os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/input/{sample_name}/{sample_name}.sortedByCoord.bam.bai")
+        bam = os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/input/{sample_name}/{sample_name}.sortedByCoord.bam"),
+        bai = os.path.normpath(OUTPUT_DIR + "/RNAEditingIndexer/input/{sample_name}/{sample_name}.sortedByCoord.bam.bai")
     output:
         temp(os.path.normpath(OUTPUT_DIR + "/Alignment_Quality_Control/samtools_idxstats/{sample_name}_idxstats.txt"))
     threads:
@@ -66,7 +71,7 @@ rule samtools_idxstats:
     conda:
         PIPELINE_DIR + "/envs/conda/samtools.yaml"
     shell:
-        "samtools idxstats {input} > {output}"
+        "samtools idxstats {input.bam} > {output}"
 
 """
 This rule combines qc computed on bam files with multiqc

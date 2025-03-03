@@ -3,7 +3,7 @@
 ########################################################################
 ## Script to launch RNAseq Editing pipeline
 ##
-## using: sbatch /mnt/beegfs/pipelines/bigr_rna_editing/dev/tests/nosampling/run_test.sh
+## using: sbatch /mnt/beegfs02/pipelines/bigr_rna_editing/dev/tests/nosampling/run_test.sh
 ##
 ########################################################################
 
@@ -13,14 +13,13 @@
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=5G
-#SBATCH --partition=bigmemq
+#SBATCH --partition=longq
 
-source /mnt/beegfs/software/miniconda/24.3.0/etc/profile.d/conda.sh
-conda activate /mnt/beegfs/pipelines/bigr_rna_editing/dev/envs/conda/snakemake
-module load singularity
-Editing_pipeline="/mnt/beegfs/pipelines/bigr_rna_editing/dev/"
+source /mnt/beegfs02/software/recherche/miniconda/25.1.1/etc/profile.d/conda.sh
+conda activate /mnt/beegfs02/pipelines/bigr_rna_editing/dev/envs/compiled_conda/snakemake
+module load singularity-ce
+Editing_pipeline="/mnt/beegfs02/pipelines/bigr_rna_editing/dev/"
 
 snakemake --profile ${Editing_pipeline}/profiles/slurm \
           -s ${Editing_pipeline}/Snakefile \
-          --configfile /mnt/beegfs/pipelines/bigr_rna_editing/dev/tests/nosampling/config.yaml
-          #--attempt 2 --restart-times 5
+          --configfile ${Editing_pipeline}/tests/nosampling/config.yaml

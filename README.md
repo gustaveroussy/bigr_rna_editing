@@ -17,14 +17,14 @@ git clone https://github.com/gustaveroussy/bigr_rna_editing.git ${VERSION}
 #### :two: Download Singularity images
 Download all singularity images from [Zenodo](https://zenodo.org/records/14916660):
 ```
-cd /mnt/beegfs/pipelines/bigr_rna_editing/${VERSION}/envs/singularity/
+cd /mnt/beegfs02/pipelines/bigr_rna_editing/${VERSION}/envs/singularity/
 wget https://zenodo.org/api/records/14916660/files-archive
 unzip files-archive
 ```
 #### :three: Install Snakemake environment
 ```
-source /mnt/beegfs/software/miniconda/24.3.0/etc/profile.d/conda.sh
-conda env create -f /mnt/beegfs/pipelines/bigr_rna_editing/${VERSION}/envs/conda/snakemake.yaml --prefix=/mnt/beegfs/pipelines/bigr_rna_editing/${VERSION}/envs/compiled_conda/snakemake -y
+source /mnt/beegfs02/software/recherche/miniconda/25.1.1/etc/profile.d/conda.sh
+conda env create -f /mnt/beegfs02/pipelines/bigr_rna_editing/${VERSION}/envs/conda/snakemake.yaml --prefix=/mnt/beegfs02/pipelines/bigr_rna_editing/${VERSION}/envs/compiled_conda/snakemake -y
 ```
 You are now ready to use the pipeline!
 
@@ -42,8 +42,8 @@ You need to make 2 files: a design file and a configuration file.
 
 Example:
 ```
-design: "/mnt/beegfs/scratch/m_aglave/Editing_analysis/script/design.csv"
-output_dir: "/mnt/beegfs/scratch/m_aglave/Editing_analysis/data_output/"
+design: "/mnt/beegfs02/scratch/m_aglave/Editing_analysis/script/design.csv"
+output_dir: "/mnt/beegfs02/scratch/m_aglave/Editing_analysis/data_output/"
 reference: "hg38"
 samples_order_for_ggplot: "S1_patient,S3_patient,S2_patient"
 SPRINT_extra: ""
@@ -58,9 +58,9 @@ It must be a comma separated file (.csv where comma is ",") with 3 columns:
 Example:
 ```
 sample_id,R1_fastq,R2_fastq
-S1_patient,/mnt/beegfs/scratch/m_aglave/Editing_analysis/data_input/S1-patient_R1.fastq.gz,/mnt/beegfs/scratch/m_aglave/Editing_analysis/data_input/S1-patient_R2.fastq.gz
-S2_patient,/mnt/beegfs/scratch/m_aglave/Editing_analysis/data_input/S2-patient_R1.fastq.gz,/mnt/beegfs/scratch/m_aglave/Editing_analysis/data_input/S2-patient_R2.fastq.gz
-S3_patient,/mnt/beegfs/scratch/m_aglave/Editing_analysis/data_input/S3-patient_R1.fastq.gz,/mnt/beegfs/scratch/m_aglave/Editing_analysis/data_input/S3-patient_R2.fastq.gz
+S1_patient,/mnt/beegfs02/scratch/m_aglave/Editing_analysis/data_input/S1-patient_R1.fastq.gz,/mnt/beegfs02/scratch/m_aglave/Editing_analysis/data_input/S1-patient_R2.fastq.gz
+S2_patient,/mnt/beegfs02/scratch/m_aglave/Editing_analysis/data_input/S2-patient_R1.fastq.gz,/mnt/beegfs02/scratch/m_aglave/Editing_analysis/data_input/S2-patient_R2.fastq.gz
+S3_patient,/mnt/beegfs02/scratch/m_aglave/Editing_analysis/data_input/S3-patient_R1.fastq.gz,/mnt/beegfs02/scratch/m_aglave/Editing_analysis/data_input/S3-patient_R2.fastq.gz
 ```
 > Notes:
 > - sample names mustn't contain special characters or spaces.
@@ -79,10 +79,10 @@ Example of script:
 #SBATCH --mem=250M
 #SBATCH --partition=longq
 
-source /mnt/beegfs/software/miniconda/24.3.0/etc/profile.d/conda.sh
-conda activate /mnt/beegfs/pipelines/bigr_rna_editing/<version>/envs/conda/snakemake
+source /mnt/beegfs02/software/recherche/miniconda/25.1.1/etc/profile.d/conda.sh
+conda activate /mnt/beegfs02/pipelines/bigr_rna_editing/<version>/envs/conda/snakemake
 module load singularity
-Editing_pipeline="/mnt/beegfs/pipelines/bigr_rna_editing/<version>/"
+Editing_pipeline="/mnt/beegfs02/pipelines/bigr_rna_editing/<version>/"
 
 snakemake --profile ${Editing_pipeline}/profiles/slurm \
           -s ${Editing_pipeline}/Snakefile \
