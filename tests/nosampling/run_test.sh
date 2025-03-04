@@ -22,4 +22,4 @@ Editing_pipeline="/mnt/beegfs02/pipelines/bigr_rna_editing/1.1.0/"
 
 snakemake --profile ${Editing_pipeline}/profiles/slurm \
           -s ${Editing_pipeline}/Snakefile \
-          --configfile ${Editing_pipeline}/tests/nosampling/config.yaml
+          --configfile ${Editing_pipeline}/tests/nosampling/config.yaml		
