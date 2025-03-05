@@ -1,5 +1,5 @@
-design: "/mnt/beegfs02/pipelines/bigr_rna_editing/1.1.0/tests/sampling_10M/design.csv"
-output_dir: "/mnt/beegfs02/pipelines/bigr_rna_editing/1.1.0/tests/sampling_10M/data_output/"
+design: "/mnt/beegfs02/pipelines/bigr_rna_editing/1.1.1/tests/sampling_10M/design.csv"
+output_dir: "/mnt/beegfs02/pipelines/bigr_rna_editing/1.1.1/tests/sampling_10M/data_output/"
 reference: "hg38"
 samples_order_for_ggplot: ""
 SPRINT_extra: ""

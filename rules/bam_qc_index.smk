@@ -16,10 +16,8 @@ rule samtools_sort:
         PIPELINE_DIR + "/envs/conda/samtools.yaml"
     shell:
         """
-        res_mem=$(({resources.mem_mb}-2000))
-        echo $res_mem
-        res_mem=$(echo $res_mem"M")
-        samtools sort {input} -o {output} -@ {threads} -m $res_mem
+        res_mem=$(({resources.mem_mb}-2000/{threads}))
+        samtools sort {input} -o {output} -@ {threads} -m ${{res_mem}}M
         """
 
 rule samtools_index:

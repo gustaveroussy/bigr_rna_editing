@@ -5,13 +5,13 @@ This pipeline uses SPRINT and RNAEditingIndexer to identify editing events from 
 
 ### Gustave Roussy users
 The pipeline is already installed on the Flamingo cluster of Gustave Roussy.  
-It is localized here: /mnt/beegfs/pipelines/bigr_rna_editing/<version>
+It is localized here: /mnt/beegfs02/pipelines/bigr_rna_editing/<version>
 
 ### Admin : installation of a new version of the pipeline
 #### :one: Download pipeline
 ```
 cd /mnt/beegfs02/pipelines/bigr_rna_editing/
-VERSION="1.1.0"
+VERSION="1.1.1"
 git clone https://github.com/gustaveroussy/bigr_rna_editing.git ${VERSION}
 ```
 #### :two: Download Singularity images
